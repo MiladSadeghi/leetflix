@@ -20,4 +20,4 @@ choice = int(input("Enter an index: "))
 magnet_link = response[choice - 1]['magnet']
 execution_array = ['webtorrent', magnet_link, '--vlc']
 
-subprocess.run(execution_array)
+subprocess.run(execution_array, shell=True)
