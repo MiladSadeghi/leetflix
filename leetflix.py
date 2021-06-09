@@ -39,6 +39,15 @@ def findButton_Command():
         movielist_table.insert('', END, text='', values=(index, f"""{result["title"]}"""))
         index += 1
 
+#get data of selected row
+def getSelected(e):
+    try:
+        curItem = movielist_table.focus()
+        itm = movielist_table.item(curItem)
+        valitm = itm.get('values')
+    except:
+        pass
+
 #frame
 rootFrame = Frame(win)
 rootFrame.pack(padx=37, pady=(13,0))
@@ -69,6 +78,7 @@ movielist_table.column('name', width = 415, anchor=W, stretch=FALSE)
 movielist_table.heading('id', text='ID', anchor=CENTER)
 movielist_table.heading('name', text='Movie Name', anchor=W)
 
+movielist_table.bind('<ButtonRelease-1>', getSelected)
 #download button
 downloadButton = Button(rootFrame, text='Download', width=38)
 downloadButton.pack(pady=(13,0))
