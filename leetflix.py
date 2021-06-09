@@ -21,20 +21,25 @@ win.title('LEETFLIX')
 win.geometry(geo(win, 350, 420))
 win.resizable(0, 0)
 
-
-#command button find
-def findButton_Command():
+#get from api
+def getData():
     movielist_table.delete(*movielist_table.get_children())
     movielist_table.insert('', END)
     response = requests.post(API_URL, data=json.dumps({"keyword" : movieName_entry.get()}), headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:88.0) Gecko/20100101 Firefox/88.0', 'content-type': 'application/json'})
     response = json.loads(response.text)
-    if len(response) == 0:
+    return response
+
+#command button find
+def findButton_Command():
+    data = getData()
+    if len(data) == 0:
         return showerror('Error!', 'Nothing found!')
     index = 1
-    for result in response:
-        movielist_table.insert('',END, text='', values=(index ,f"""{result["title"]}"""))
+    for result in data:
+        movielist_table.insert('', END, text='', values=(index, f"""{result["title"]}"""))
         index += 1
 
+#frame
 rootFrame = Frame(win)
 rootFrame.pack(padx=37, pady=(13,0))
 
