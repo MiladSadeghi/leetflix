@@ -27,6 +27,10 @@ movieName_entry.grid(pady=(0,10), ipady=2)
 
 #button Find!
 findMovie_button = Button(test ,text='Find', width=38)
-findMovie_button.grid()
+findMovie_button.grid(pady=(0,14))
+
+#text area for movie list
+movielist_text = Text(test, width=34, height=13)
+movielist_text.grid()
 
 win.mainloop()
