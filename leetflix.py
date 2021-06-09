@@ -9,10 +9,16 @@ def geo(window,x,y):
     x = '%dx%d+%d+%d' % (x, y, scr_x, scr_y)
     return x
 
+#window
 win = Tk()
 win.title('LEETFLIX')
-win.geometry(geo(win, 400, 400))
+win.geometry(geo(win, 350, 400))
 win.resizable(FALSE, FALSE)
 
+#enter movie name
+movieName_label = Label(win, text='Movie name (or Keywords)', font=('',9))
+movieName_entry = Entry(win, width=30, font=('',13), justify=CENTER)
+movieName_label.place(x = 30, y = 20)
+movieName_entry.place(x = 33, y = 47)
 
 win.mainloop()
