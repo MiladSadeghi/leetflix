@@ -5,6 +5,8 @@ import requests
 import subprocess
 from tkinter import *
 from tkinter import ttk
+from threading import *
+from tkinter import filedialog
 
 #api
 API_URL = "https://leetflix.haghiri75.com"
@@ -60,8 +62,15 @@ def getSelected(e):
 #download button command
 def downloadButton_command():
     try:
-        execution_array = """webtorrent "{}" --vlc""".format(magnetLinks[idMovies[0]])
-        subprocess.run(execution_array, shell=True)
+        folder_selected = filedialog.askdirectory()
+
+        def work():
+            Thread(target=subprocess.run(execution_array, shell=True))
+            
+        execution_array = """webtorrent "{}" --vlc -o "{}" """.format(magnetLinks[idMovies[0]], folder_selected)
+        thWork = Thread(target=work)
+        thWork.start()
+        
     except Exception as e:
         print(e)
         messagebox.showerror('No select!', 'You should select your movies.')
