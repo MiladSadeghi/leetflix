@@ -1,4 +1,5 @@
 import json
+from tkinter import messagebox
 from tkinter.messagebox import *
 import requests
 import subprocess
@@ -7,6 +8,10 @@ from tkinter import ttk
 
 #api
 API_URL = "https://leetflix.haghiri75.com"
+
+#lists
+idMovies = []
+magnetLinks = {}
 
 #position app
 def geo(window,x,y):
@@ -31,22 +36,35 @@ def getData():
 
 #command button find
 def findButton_Command():
+    magnetLinks.clear()
     data = getData()
     if len(data) == 0:
         return showerror('Error!', 'Nothing found!')
     index = 1
     for result in data:
         movielist_table.insert('', END, text='', values=(index, f"""{result["title"]}"""))
+        magnetLinks[index]=result['magnet']
         index += 1
 
 #get data of selected row
 def getSelected(e):
     try:
+        idMovies.clear()
         curItem = movielist_table.focus()
         itm = movielist_table.item(curItem)
         valitm = itm.get('values')
+        idMovies.append(valitm[0])
     except:
         pass
+
+#download button command
+def downloadButton_command():
+    try:
+        execution_array = """webtorrent "{}" --vlc""".format(magnetLinks[idMovies[0]])
+        subprocess.run(execution_array, shell=True)
+    except Exception as e:
+        print(e)
+        messagebox.showerror('No select!', 'You should select your movies.')
 
 #frame
 rootFrame = Frame(win)
@@ -79,8 +97,9 @@ movielist_table.heading('id', text='ID', anchor=CENTER)
 movielist_table.heading('name', text='Movie Name', anchor=W)
 
 movielist_table.bind('<ButtonRelease-1>', getSelected)
+
 #download button
-downloadButton = Button(rootFrame, text='Download', width=38)
+downloadButton = Button(rootFrame, text='Download', width=38, command=downloadButton_command)
 downloadButton.pack(pady=(13,0))
 
 win.mainloop()
