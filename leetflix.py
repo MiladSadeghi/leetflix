@@ -18,7 +18,7 @@ def geo(window,x,y):
 #window
 win = Tk()
 win.title('LEETFLIX')
-win.geometry(geo(win, 350, 400))
+win.geometry(geo(win, 350, 420))
 win.resizable(0, 0)
 
 
@@ -66,6 +66,6 @@ movielist_table.heading('name', text='Movie Name', anchor=W)
 
 #download button
 downloadButton = Button(rootFrame, text='Download', width=38)
-downloadButton.pack(pady=(10,0))
+downloadButton.pack(pady=(13,0))
 
 win.mainloop()
