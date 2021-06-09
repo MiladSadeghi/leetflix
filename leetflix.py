@@ -19,30 +19,53 @@ def geo(window,x,y):
 win = Tk()
 win.title('LEETFLIX')
 win.geometry(geo(win, 350, 400))
-win.resizable(FALSE, FALSE)
+win.resizable(0, 0)
 
+
+#command button find
+def findButton_Command():
+    movielist_table.delete(*movielist_table.get_children())
+    movielist_table.insert('', END)
+    response = requests.post(API_URL, data=json.dumps({"keyword" : movieName_entry.get()}), headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:88.0) Gecko/20100101 Firefox/88.0', 'content-type': 'application/json'})
+    response = json.loads(response.text)
+    if len(response) == 0:
+        return showerror('Error!', 'Nothing found!')
+    index = 1
+    for result in response:
+        movielist_table.insert('',END, text='', values=(index ,f"""{result["title"]}"""))
+        index += 1
 
 rootFrame = Frame(win)
-rootFrame.grid(padx=37, pady=(13,0))
+rootFrame.pack(padx=37, pady=(13,0))
 
 #enter movie name
 movieName_label = Label(rootFrame, text='Movie name (or Keywords)', font=('',9))
 movieName_entry = Entry(rootFrame, width=30, font=('',13), justify=CENTER)
-movieName_label.grid(sticky=W, pady=(0,10))
-movieName_entry.grid(pady=(0,10), ipady=2)
+movieName_label.pack(pady=(0,10))
+movieName_entry.pack(pady=(0,10), ipady=2)
 
 #button Find!
-findMovie_button = Button(rootFrame ,text='Find', width=38, command=findCommand)
-findMovie_button.grid(pady=(0,14))
+findMovie_button = Button(rootFrame ,text='Find', width=38, command=findButton_Command)
+findMovie_button.pack(pady=(0,14))
 
 #table for movie list
-movielist_table = ttk.Treeview(rootFrame, show='headings', columns=(0))
-movielist_table.grid()
-movielist_table.column(0, width=275, stretch=NO, anchor="center")
-movielist_table.heading(0, text='Movies', anchor=W)
+tableFrame = Frame(rootFrame)
+
+movielist_table = ttk.Treeview(tableFrame, show='headings', columns=('id','name'))
+verscrlbar = Scrollbar(tableFrame, orient = HORIZONTAL, command = movielist_table.xview)
+movielist_table.configure(xscrollcommand = verscrlbar.set)
+verscrlbar.pack(side = 'bottom', fill = X)
+movielist_table.pack()
+tableFrame.pack()
+
+movielist_table.column('id', width=20, anchor=W, stretch=FALSE)
+movielist_table.column('name', width = 415, anchor=W, stretch=FALSE)
+
+movielist_table.heading('id', text='ID', anchor=CENTER)
+movielist_table.heading('name', text='Movie Name', anchor=W)
 
 #download button
 downloadButton = Button(rootFrame, text='Download', width=38)
-downloadButton.grid(pady=(10,0))
+downloadButton.pack(pady=(10,0))
 
 win.mainloop()
