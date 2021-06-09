@@ -22,4 +22,5 @@ def program():
     execution_array = """webtorrent "{}" --vlc""".format(magnet_link)
     subprocess.run(execution_array, shell=True)
 
-program()
+while 1:
+    program()
