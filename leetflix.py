@@ -7,9 +7,7 @@ from tkinter import *
 from tkinter import ttk
 from threading import *
 from tkinter import filedialog
-from PIL import ImageTk
-from urllib import *
-import base64, PIL, urllib.request
+import base64, urllib.request
 
 #api
 API_URL = "https://leetflix.haghiri75.com"
@@ -24,8 +22,6 @@ def geo(window,x,y):
     scr_x, scr_y = (scr_width/2) - (x/2), (scr_height/2) - (y/2)
     x = "%dx%d+%d+%d" % (x, y, scr_x, scr_y)
     return x
-
-
 
 #get from api
 def getData():
@@ -51,7 +47,6 @@ def findButton_Command():
     messagebox.showwarning('!', 'DONT CLOSE APP!')
     thWork = Thread(target=work)
     thWork.start()
-    
 
 #get data of selected row
 def getSelected(e):
@@ -68,7 +63,7 @@ def getSelected(e):
 def downloadButton_command():
     try:
         folder_selected = filedialog.askdirectory()
-        messagebox.showwarning('DO NOT CLOSE', 'IF APP CLOSE, DOWNLOAD AND PLAY WOULD BE CANCEL!')
+        messagebox.showwarning('Do not close.', 'If the application is closed, downloading and playback will stop.')
         def work():
             subprocess.run(execution_array, shell=True)
             
@@ -78,7 +73,7 @@ def downloadButton_command():
         
     except Exception as e:
         print(e)
-        messagebox.showerror('No select!', 'You should select your movies.')
+        messagebox.showerror('Nothing selected!', 'Please select your desired movie.')
 
 #window
 win = Tk()
@@ -98,7 +93,7 @@ rootFrame.pack(padx=37, pady=(13,0))
 #enter movie name
 movieName_label = Label(rootFrame, text='Movie name (or Keywords)', font=('',9))
 movieName_entry = Entry(rootFrame, width=30, font=('',13), justify=CENTER)
-movieName_label.pack(pady=(0,10))
+movieName_label.pack(pady=(0,10), anchor=NW)
 movieName_entry.pack(pady=(0,10), ipady=2)
 
 #button Find!
