@@ -1,4 +1,5 @@
 import json
+import threading
 from tkinter import messagebox
 from tkinter.messagebox import *
 import requests
@@ -7,6 +8,7 @@ from tkinter import *
 from tkinter import ttk
 from threading import *
 from tkinter import filedialog
+from time import sleep
 
 #api
 API_URL = "https://leetflix.haghiri75.com"
@@ -38,15 +40,21 @@ def getData():
 
 #command button find
 def findButton_Command():
-    magnetLinks.clear()
-    data = getData()
-    if len(data) == 0:
-        return showerror('Error!', 'Nothing found!')
-    index = 1
-    for result in data:
-        movielist_table.insert('', END, text='', values=(index, f"""{result["title"]}"""))
-        magnetLinks[index]=result['magnet']
-        index += 1
+    def work():
+        movielist_table.delete(*movielist_table.get_children())
+        magnetLinks.clear()
+        data = getData()
+        if len(data) == 0:
+            return showerror('Error!', 'Nothing found!')
+        index = 1
+        for result in data:
+            movielist_table.insert('', END, text='', values=(index, f"""{result["title"]}"""))
+            magnetLinks[index]=result['magnet']
+            index += 1
+    messagebox.showwarning('!', 'DONT CLOSE APP!')
+    thWork = Thread(target=work)
+    thWork.start()
+    
 
 #get data of selected row
 def getSelected(e):
@@ -63,9 +71,9 @@ def getSelected(e):
 def downloadButton_command():
     try:
         folder_selected = filedialog.askdirectory()
-
+        messagebox.showwarning('DO NOT CLOSE', 'IF APP CLOSE, DOWNLOAD AND PLAY WOULD BE CANCEL!')
         def work():
-            Thread(target=subprocess.run(execution_array, shell=True))
+            subprocess.run(execution_array, shell=True)
             
         execution_array = """webtorrent "{}" --vlc -o "{}" """.format(magnetLinks[idMovies[0]], folder_selected)
         thWork = Thread(target=work)
