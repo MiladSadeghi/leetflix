@@ -66,11 +66,9 @@ def downloadButton_command():
         messagebox.showwarning('Do not close.', 'If the application is closed, downloading and playback will stop.')
         def work():
             subprocess.run(execution_array, shell=True)
-            
         execution_array = """webtorrent "{}" --vlc -o "{}" """.format(magnetLinks[idMovies[0]], folder_selected)
         thWork = Thread(target=work)
-        thWork.start()
-        
+        thWork.start()  
     except Exception as e:
         print(e)
         messagebox.showerror('Nothing selected!', 'Please select your desired movie.')
