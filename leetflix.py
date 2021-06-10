@@ -1,5 +1,4 @@
 import json
-import threading
 from tkinter import messagebox
 from tkinter.messagebox import *
 import requests
@@ -8,7 +7,9 @@ from tkinter import *
 from tkinter import ttk
 from threading import *
 from tkinter import filedialog
-from time import sleep
+from PIL import ImageTk
+from urllib import *
+import base64, PIL, urllib.request
 
 #api
 API_URL = "https://leetflix.haghiri75.com"
@@ -24,11 +25,7 @@ def geo(window,x,y):
     x = "%dx%d+%d+%d" % (x, y, scr_x, scr_y)
     return x
 
-#window
-win = Tk()
-win.title('LEETFLIX')
-win.geometry(geo(win, 350, 420))
-win.resizable(0, 0)
+
 
 #get from api
 def getData():
@@ -82,6 +79,17 @@ def downloadButton_command():
     except Exception as e:
         print(e)
         messagebox.showerror('No select!', 'You should select your movies.')
+
+#window
+win = Tk()
+win.title('LEETFLIX')
+win.geometry(geo(win, 350, 420))
+win.resizable(0, 0)
+
+raw_data = urllib.request.urlopen("https://8pic.ir/uploads/LEETFLIX_579c4.png").read()
+b64_data = base64.b64encode(raw_data)
+image = PhotoImage(data=b64_data)
+win.call('wm', 'iconphoto', win._w, image)
 
 #frame
 rootFrame = Frame(win)
